@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sathish--Rocker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* ----- Dark theme base ----- */
+    :root {
+      --bg-color: #050608;
+      --card-color: #111319;
+      --accent: #6c5ce7;
+      --accent-soft: rgba(108, 92, 231, 0.15);
+      --text-main: #f5f7ff;
+      --text-muted: #9ca3af;
+      --border-subtle: #272a35;
+      --danger: #ef4444;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 0 40px rgba(108, 92, 231, 0.4);
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(circle at top left, #1f2933 0, transparent 60%),
+        radial-gradient(circle at bottom right, #111827 0, transparent 55%),
+        #020617;
+      color: var(--text-main);
+      padding: 24px 16px;
+    }
+
+    /* ----- Shell layout ----- */
+    .app-shell {
+      width: 100%;
+      max-width: 720px;
+      background: linear-gradient(145deg, #050608 0, #020308 45%, #050608 100%);
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at top left, rgba(94, 234, 212, 0.08), transparent 50%),
+        radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.15), transparent 55%);
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .app-inner {
+      padding: 20px 22px 22px;
+    }
+
+    /* ----- Header / Logo ----- */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background:
+        conic-gradient(from 210deg, #22d3ee, #4f46e5, #a855f7, #22d3ee);
+      padding: 2px;
+      box-shadow: 0 0 22px rgba(99, 102, 241, 0.65);
+    }
+
+    .logo-core {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: radial-gradient(circle at 30% 20%, #0f172a, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .logo-text-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .logo-title {
+      font-size: 1.1rem;
+      font-weight: 650;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #e5e7ff;
+    }
+
+    .logo-sub {
+      font-size: 0.73rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .header-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      backdrop-filter: blur(12px);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    /* ----- Card layout ----- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 3.5fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 720px) {
+      .card-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .panel {
+      background: radial-gradient(circle at top left, #111827, #020617 80%);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 16px 16px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at top, rgba(148, 163, 253, 0.08), transparent 60%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #cbd5f5;
+    }
+
+    .panel-caption {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    /* ----- Form styles ----- */
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #9ca3ff;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      padding: 9px 10px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast),
+        background var(--transition-fast);
+      resize: vertical;
+      min-height: 38px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #6b7280;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.4);
+      background: radial-gradient(circle at top, #020617, #020617 55%, #020617);
+      transform: translateY(-1px);
+    }
+
+    .actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 9px 18px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast),
+        border-color var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at top left, #4f46e5, #7c3aed);
+      color: #e5e7ff;
+      box-shadow: 0 12px 30px rgba(55, 65, 194, 0.65);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(248, 250, 252, 0.35),
+        transparent
+      );
+      opacity: 0;
+      transform: translateX(-60%);
+      transition: opacity 0.25s ease-out, transform 0.35s ease-out;
+    }
+
+    .btn-primary:hover::after {
+      opacity: 1;
+      transform: translateX(55%);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.85);
+    }
+
+    .btn-secondary {
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15, 23, 42, 1);
+      transform: translateY(-1px);
+      border-color: rgba(209, 213, 219, 0.9);
+    }
+
+    .hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .hint span {
+      color: #a5b4fc;
+    }
+
+    .error-text {
+      margin-top: 4px;
+      font-size: 0.76rem;
+      color: var(--danger);
+      min-height: 1em;
+    }
+
+    /* ----- Output area ----- */
+    .output-card {
+      min-height: 140px;
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(75, 85, 99, 0.9);
+      background: radial-gradient(circle at top left, #020617, #020617 65%, #020617);
+      padding: 12px 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .output-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ca3ff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.6);
+        opacity: 0.35;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .output-empty {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .output-content {
+      font-size: 0.92rem;
+      margin-top: 4px;
+      line-height: 1.55;
+      color: #e5e7ff;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .output-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.95);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      align-self: flex-start;
+    }
+
+    .output-tag span {
+      color: #a5b4fc;
+      font-weight: 500;
+    }
+
+    .noise {
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: soft-light;
+      opacity: 0.12;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="noise" aria-hidden="true"></div>
+
+    <div class="app-inner">
+      <header class="app-header">
+        <!-- Logo -->
+        <div class="logo-wrap">
+          <div class="logo-mark">
+            <div class="logo-core">
+              <!-- SR = Sathish Rocker -->
+              SR
+            </div>
+          </div>
+          <div class="logo-text-block">
+            <div class="logo-title">Sathish--Rocker</div>
+            <div class="logo-sub">Dark-mode input echo</div>
+          </div>
+        </div>
+
+        <div class="header-pill">
+          <span class="status-dot"></span>
+          <span>Live playground</span>
+        </div>
+      </header>
+
+      <main class="card-grid">
+        <!-- Input panel -->
+        <section class="panel" aria-label="Input panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Your text</h2>
+            <p class="panel-caption">Type something and hit echo.</p>
+          </div>
+
+          <form id="echo-form" autocomplete="off" novalidate>
+            <div class="form-row">
+              <label for="userInput">Message</label>
+              <textarea
+                id="userInput"
+                name="userInput"
+                rows="3"
+                placeholder="Type anything here…"
+              ></textarea>
+              <div id="error" class="error-text"></div>
+            </div>
+
+            <div class="actions-row">
+              <button type="submit" class="btn-primary">
+                <span>Echo it</span>
+              </button>
+
+              <button type="button" id="clearBtn" class="btn-secondary">
+                Clear
+              </button>
+
+              <p class="hint">
+                Pro tip: Press <span>Ctrl + Enter</span> (or <span>Cmd + Enter</span>) to echo instantly.
+              </p>
+            </div>
+          </form>
+        </section>
+
+        <!-- Output panel -->
+        <section class="panel" aria-label="Output panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Output</h2>
+            <p class="panel-caption">Your text appears here.</p>
+          </div>
+
+          <div class="output-card">
+            <div class="output-label">
+              <span class="pulse-dot"></span>
+              <span>Echo console</span>
+            </div>
+
+            <p id="emptyState" class="output-empty">
+              Waiting for your first message…
+            </p>
+            <div id="output" class="output-content" hidden></div>
+
+            <div class="output-tag" id="outputTag" hidden>
+              Last action:
+              <span id="outputMeta">None yet</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("echo-form");
+    const input = document.getElementById("userInput");
+    const output = document.getElementById("output");
+    const emptyState = document.getElementById("emptyState");
+    const errorEl = document.getElementById("error");
+    const clearBtn = document.getElementById("clearBtn");
+    const outputMeta = document.getElementById("outputMeta");
+    const outputTag = document.getElementById("outputTag");
+
+    function showError(message) {
+      errorEl.textContent = message;
+    }
+
+    function clearError() {
+      errorEl.textContent = "";
+    }
+
+    function echoText() {
+      const value = input.value.trim();
+
+      if (!value) {
+        showError("Please type something before echoing.");
+        output.textContent = "";
+        output.hidden = true;
+        emptyState.hidden = false;
+        outputTag.hidden = true;
+        return;
+      }
+
+      clearError();
+      output.textContent = value;
+      output.hidden = false;
+      emptyState.hidden = true;
+
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      outputMeta.textContent = "Echoed at " + timeString;
+      outputTag.hidden = false;
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      echoText();
+    });
+
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      output.textContent = "";
+      output.hidden = true;
+      emptyState.hidden = false;
+      outputTag.hidden = true;
+      clearError();
+      input.focus();
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault();
+        echoText();
+      }
+    });
+  </script>
+</body>
+</html>
